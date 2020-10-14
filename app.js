@@ -12,51 +12,91 @@ var scores, roundScore = 0, activePlayer = 0, gamePlaying;
 init();
 
 
+
+
 //document.querySelector('#current-' + activePlayer).textContent = dice;
 //document.querySelector('#current-' + activePlayer).innerHTML =  '<em>' + dice + '</em>';
 
+
+
+
+var prevOne = 0, prevTwo = 0;
+
+var lastDice;
 
 document.querySelector('.btn-roll').addEventListener('click', function(){
     
     if(gamePlaying){
         //1. Random Number
         var dice = Math.floor(Math.random() * 6) + 1;
-        console.log(dice);
-        //2. Display the result
-        var diceDOM = document.querySelector('.dice');
-        diceDOM.style.display = 'block';
-        diceDOM.src = 'dice-' + dice + '.png';
+        dice  = 6;
+        var flag = true;
 
-        //3. Update the result if the number is not 1
-        if(dice !== 1){
-            //Add Score
-            roundScore += dice;
-            document.querySelector("#current-" + activePlayer).textContent = roundScore;
+        /*
+        if(activePlayer === 0){
+            if(prevOne === 0){
+                prevOne = dice;
+            }
+            else{
+                if(prevOne === 6 && dice === 6){
+                    flag = false;
+                    scores[activePlayer] = 0;
+                    document.querySelector('#score-' + activePlayer).textContent = '0';
+                    alert("Your score is zero. You rolled 6 twice.")
+                    nextPlayer();
+                    prevOne = 0;
+                }
+                else{
+                    prevOne = dice;
+                }
+            }
         }
         else{
-            //Next Player
-            nextPlayer();
-
-
-            /*
-            if(activePlayer === 0) 
-                activePlayer = 1;
-            else
-                activePlayer = 0;
-            */
-            
-
-
-            /*
-            if(activePlayer === 0){
-                document.querySelector('.player-0-panel').classList.remove('active');
-                document.querySelector('.player-1-panel').classList.add('active');
-            } 
-            else{
-                document.querySelector('.player-0-panel').classList.add('active');
-                document.querySelector('.player-1-panel').classList.remove('active');
+            if(prevTwo === 0){
+                prevTwo = dice;
             }
-            */
+            else{
+                if(prevTwo === 6 && dice === 6){
+                    scores[activePlayer] = 0;
+                    document.querySelector('#score-' + activePlayer).textContent = '0';
+                    alert("Your score is zero. You rolled 6 twice.")
+                    flag = false;
+                    nextPlayer();
+                    prevTwo = 0;
+                }
+                else{
+                    prevTwo = dice;
+                }
+            }
+        }
+
+        */
+
+        if(flag){
+            //2. Display the result
+            var diceDOM = document.querySelector('.dice');
+            diceDOM.style.display = 'block';
+            diceDOM.src = 'dice-' + dice + '.png';
+
+            //3. Update the result if the number is not 1
+            if(dice === 6 && lastDice === 6){
+                //player looses score
+                scores[activePlayer] = 0;
+                document.querySelector('#score-' + activePlayer).textContent = '0';
+                nextPlayer();
+            }
+
+            if(dice !== 1){
+                //Add Score
+                roundScore += dice;
+                document.querySelector("#current-" + activePlayer).textContent = roundScore;
+            }
+            else{
+                //Next Player
+                nextPlayer();
+            }
+
+            lastDice = dice;
         }
     }
 });
@@ -101,6 +141,9 @@ function nextPlayer(){
     document.querySelector('.player-0-panel').classList.toggle('active');
     document.querySelector('.player-1-panel').classList.toggle('active');
     document.querySelector('.dice').style.display = 'none';
+
+    prevTwo = 0;
+    prevOne = 0;
 }
 
 //new game 
