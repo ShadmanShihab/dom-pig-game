@@ -8,5 +8,3 @@ GAME RULES:
 - The first player to reach 100 points on GLOBAL score wins the game
     -- test
 */
-
-console.log("hello")
